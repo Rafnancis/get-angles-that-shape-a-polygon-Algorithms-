@@ -1,0 +1,312 @@
+using System;
+using System.Collections.Generic;
+
+namespace BoundingBoxConvexPolygon
+{
+    // *************************************
+    // DON'T CHANGE CLASS OR FUNCTION NAME
+    // YOU CAN ADD FUNCTIONS IF YOU NEED TO
+    // *************************************
+
+    #region Helper structures
+    public struct BoundingBox
+    {
+        public double minX;
+        public double minY;
+        public double maxX;
+        public double maxY;
+    }
+
+    public struct Point
+    {
+        public double X;
+        public double Y;
+    }
+    #endregion
+
+    public static class BoundingBoxConvexPolygon
+    {
+
+        public static double get_max(Point[] Points, int start, int end, double type, int n)
+        {
+
+            double largest = 0;
+
+            //int mid = 0;
+
+
+            if (type == 'X')
+            {
+
+                int s = n - start;
+                int e = n - end;
+                int t = s - e;
+                int mid = (t / 2) + start;
+
+                if (e - s == 2)
+                {
+                    if (Points[mid].X > Points[mid + 1].X)
+                    {
+                        largest = Points[mid].X;
+                    }
+                    else
+                    {
+                        largest = Points[mid + 1].X;
+                    }
+                }
+
+                else if (end - start == 1)
+                {
+
+                    largest = Points[mid].X;
+                }
+
+                if (mid == n - 1)
+                {
+                    largest = Points[n - 1].X;
+                }
+                else if (Points[mid].X < Points[mid + 1].X)
+                {
+                    largest = get_max(Points, mid, end, 'X', n);
+                }
+                else if (Points[mid].X < Points[mid - 1].X)
+                {
+                    largest = get_max(Points, start, mid, 'X', n);
+                }
+                else if (Points[mid].X > Points[mid - 1].X && Points[mid].X > Points[mid + 1].X)
+                {
+                    largest = Points[mid].X;
+                }
+
+
+
+                return largest;
+
+            }
+
+            else if (type == 'y')
+            {
+
+                int s = n - start;
+                int e = n - end;
+                int t = s - e;
+                int mid = (t / 2) + start;
+
+                if (e - s == 2)
+                {
+                    if (Points[mid].Y > Points[mid + 1].Y)
+                    {
+                        largest = Points[mid].Y;
+                    }
+                    else
+                    {
+                        largest = Points[mid + 1].Y;
+                    }
+                }
+
+                else if (end - start == 1)
+                {
+
+                    largest = Points[mid].Y;
+                }
+
+                if (mid == n - 1)
+                {
+                    largest = Points[n - 1].Y;
+                }
+                else if (Points[mid].Y < Points[mid + 1].Y)
+                {
+                    largest = get_max(Points, mid, end, 'y', n);
+                }
+                else if (Points[mid].Y < Points[mid - 1].Y)
+                {
+                    largest = get_max(Points, start, mid, 'y', n);
+                }
+                else if (Points[mid].Y > Points[mid - 1].Y && Points[mid].Y > Points[mid + 1].Y)
+                {
+                    largest = Points[mid].Y;
+                }
+
+            }
+
+            return largest;
+        }
+        public static double Get_min(Point[] Points, int start, int end, char type, int n)
+        {
+
+
+
+            double smallest = 0;
+
+
+
+            if (type == 'X')
+            {
+
+                int mid = 0;
+                mid = (end - start) / 2;
+                if (mid == 1)
+                {
+
+                    if (Points[mid].X > Points[mid - 1].X)
+                    {
+
+                        smallest = Points[mid - 1].X;
+
+                    }
+                    else if (Points[mid].X < Points[mid - 1].X)
+                    {
+
+                        smallest = Points[mid].X;
+
+                    }
+                }
+
+                if (mid == 0 && Points[mid].X > Points[mid + 1].X)
+                {
+                    if (Points[mid].X < Points[mid + 1].X)
+                        smallest = Points[mid].X;
+                    else
+                    {
+                        smallest = Points[mid + 1].X;
+                    }
+
+                }
+                else
+                {
+                    if (mid > 1 && Points[mid].X > Points[mid - 1].X)
+                    {
+
+                        smallest = Get_min(Points, start, mid, 'X', n);
+
+
+                    }
+                    else if (mid > 1 && Points[mid].X < Points[mid - 1].X)
+                    {
+                        smallest = Get_min(Points, start, mid, 'X', n);
+                    }
+                }
+                return smallest;
+            }
+            else if (type == 'y')
+            {
+
+                int s = n - start;
+                int e = n - end;
+                int t = s - e;
+                int mid = (t / 2) + start;
+                if (mid == 1)
+                {
+
+                    if (Points[mid].Y > Points[mid - 1].Y)
+                    {
+                        smallest = Points[mid - 1].Y;
+                    }
+                    else
+                    {
+                        smallest = Points[mid].Y;
+                    }
+                }
+
+                if (mid == 0 && Points[mid].Y > Points[mid + 1].Y)
+                {
+
+                    smallest = Points[mid + 1].Y;
+
+                }
+                else
+
+                {
+                    if (end - start == 2)
+                    {
+
+                        if (Points[mid + 1].Y < Points[mid].Y && Points[mid + 1].Y < Points[mid - 1].Y)
+                            smallest = Points[mid + 1].Y;
+                        else if (Points[mid].Y < Points[mid - 1].Y && Points[mid].Y < Points[mid + 1].Y)
+                            smallest = Points[mid].Y;
+                        else if (Points[mid - 1].Y < Points[mid].Y && Points[mid - 1].Y < Points[mid + 1].Y)
+                            smallest = Points[mid - 1].Y;
+
+                    }
+                    else
+                    {
+                        if (mid == 0)
+                        {
+
+                            smallest = Points[mid].Y;
+                        }
+
+                        else
+                        {
+                            if (Points[mid].Y < Points[mid - 1].Y && Points[mid].Y < Points[mid + 1].Y)
+                            {
+                                smallest = Points[mid].Y;
+
+                            }
+                            else if (Points[mid].Y < Points[mid - 1].Y && Points[mid].Y < Points[mid + 1].Y)
+                            {
+
+                                smallest = Points[mid].Y;
+                                return smallest;
+                            }
+                            else if (Points[mid].Y > Points[mid - 1].Y && Points[mid].Y < Points[mid + 1].Y)
+                            {
+
+                                smallest = Get_min(Points, start, mid, 'y', n);
+                            }
+                            else if (Points[mid].Y < Points[mid - 1].Y && Points[mid].Y > Points[mid + 1].Y)
+                            {
+
+                                smallest = Get_min(Points, mid, end, 'y', n);
+                            }
+                            else if (Points[mid].Y > Points[mid - 1].Y)
+                            {
+
+
+                                smallest = Get_min(Points, start, mid, 'y', n);
+                            }
+                            else if (Points[mid].Y > Points[mid + 1].Y)
+                            {
+
+
+                                smallest = Get_min(Points, mid, end, 'y', n);
+                            }
+                        }
+                    }
+                }
+
+                return smallest;
+            }
+
+            return smallest;
+
+        }
+        public static BoundingBox BoundingBoxOfConvexPolygon(Point[] Points, int N)
+        {
+            BoundingBox p = new BoundingBox();
+            int size = Points.Length;
+
+            double min = 0;
+            double min2 = 0;
+            double max = 0;
+            double max2 = 1;
+
+
+            min = Get_min(Points, 0, size, 'X', N);
+            min2 = Get_min(Points, 0, size / 2, 'y', N);
+            max = get_max(Points, 0, size, 'X', N);
+            max2 = get_max(Points, 0, size, 'y', N);
+            p.minX = min;
+            p.minY = min2;
+            p.maxX = max;
+            p.maxY = max2;
+
+            return p;
+        }
+
+        //========================================================================================================
+
+
+
+    }
+}
